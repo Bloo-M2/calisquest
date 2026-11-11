@@ -1,0 +1,443 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0d0f12"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="CalisQuest"><link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Crect width=%27100%27 height=%27100%27 fill=%27%23ff6b2c%27/%3E%3Ctext x=%2750%27 y=%2772%27 font-size=%2765%27 text-anchor=%27middle%27 fill=%27white%27 font-family=%27Arial%27 font-weight=%27900%27%3ECQ%3C/text%3E%3C/svg%3E"><title>CalisQuest</title><style>*{box-sizing:border-box}body{margin:0;background:#0d0f12;color:#eef0f3;font:15px/1.45 system-ui,-apple-system,Segoe UI,sans-serif}
+#app{max-width:640px;margin:0 auto;padding:0 14px 90px}
+header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 0 8px}
+.brand{font-size:18px;letter-spacing:2px;font-weight:300}.brand b{color:#ff6b2c;font-weight:900}
+.seg{display:flex;background:#1a1d23;border-radius:99px;padding:3px}.seg button{border:0;background:none;color:#9aa1ad;padding:7px 12px;border-radius:99px;font-weight:600;cursor:pointer;font-size:13px}
+.seg button.on{background:#ff6b2c;color:#fff}
+.gear{background:#1a1d23;border:0;color:#eef0f3;width:38px;height:38px;border-radius:50%;font-size:19px;cursor:pointer}
+.hud{display:flex;justify-content:space-between;align-items:baseline;margin:6px 0 4px}.rk{color:#ff6b2c;font-weight:800;text-transform:uppercase;letter-spacing:1px}
+.mut{color:#8d95a3}.sm{font-size:12.5px}.pad{padding:20px 4px}
+.bar{height:7px;background:#1f232a;border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,#ff6b2c,#ffb02c);border-radius:9px}
+h1{font-size:27px;margin:4px 0 6px;line-height:1.15}h2{font-size:16px;margin:0 0 8px}h3{font-size:13px;text-transform:uppercase;letter-spacing:1px;color:#8d95a3;margin:20px 0 8px}
+.hero{padding:14px 0 6px}.hero p{margin:4px 0 10px}
+.card{background:#161920;border-radius:16px;padding:14px;margin:12px 0}
+.bh{display:flex;justify-content:space-between;align-items:baseline}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 12px}.chip{background:#20242c;border:1px solid #2a2f39;color:#dfe3ea;padding:9px 14px;border-radius:99px;cursor:pointer;font-size:14px}
+.chip.on{background:#ff6b2c;border-color:#ff6b2c;color:#fff;font-weight:700}
+.row{display:flex;gap:8px;margin-bottom:12px}input,select{background:#20242c;border:1px solid #2a2f39;color:#eef0f3;border-radius:10px;padding:10px;font-size:15px;width:100%}
+.btn{background:#ff6b2c;color:#fff;border:0;border-radius:12px;padding:12px 18px;font-weight:700;font-size:15px;cursor:pointer;margin-top:10px}
+.btn.big{width:100%;padding:15px;font-size:16px;margin:12px 0}.btn.sm{margin:0;padding:8px 14px}.btn:disabled{background:#2a2f39;color:#7d8594;cursor:not-allowed}
+.btn.ghost{background:#20242c;color:#eef0f3}.btn.danger{color:#ff6b6b}
+.ex{display:flex;align-items:center;gap:10px;padding:11px 4px;border-top:1px solid #20242c;cursor:pointer}.ex:first-of-type{border-top:0}
+.ex input{width:22px;height:22px;accent-color:#ff6b2c;flex:none}.ec{flex:1}.ec em{display:block;font-style:normal;font-size:12px;color:#8d95a3}
+.es{color:#ffb02c;font-weight:700;white-space:nowrap;font-size:14px}.ex.done .ec{opacity:.45;text-decoration:line-through}.ex.lock{opacity:.5}
+.fit{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;background:#1d1812;border:1px solid #3a2a1c;border-radius:12px;padding:10px 14px;margin:12px 0;color:#ffb02c;font-weight:600}
+.fit .mut{font-weight:400;font-size:12.5px}
+.nut{background:#13201a;border:1px solid #1f3a2b}.nut ul{margin:6px 0 10px;padding-left:18px}
+.tm{display:grid;grid-template-columns:1fr 1fr;gap:12px}.tm p{margin:3px 0}
+.prog{display:flex;align-items:center;gap:10px}.prog .bar{flex:1}
+.win{background:#13201a;border:1px solid #1f3a2b;border-radius:14px;padding:16px;text-align:center;font-weight:700;margin:12px 0}
+.wk{display:flex;gap:10px;padding:7px 0;border-top:1px solid #20242c}.wk b{width:38px}.wk span{flex:1}.wk em{font-style:normal;color:#7dd9a5;font-size:13px}
+.tip{background:#20242c;border-radius:10px;padding:10px;margin:6px 0;font-size:14px}
+.map{position:relative;margin:10px 0}.map:before{content:"";position:absolute;left:22px;top:10px;bottom:10px;width:3px;background:#20242c}
+.node{display:flex;gap:14px;align-items:center;width:100%;background:none;border:0;color:inherit;text-align:left;padding:8px 0;cursor:pointer;position:relative}
+.dot{width:46px;height:46px;border-radius:50%;background:#20242c;display:grid;place-items:center;font-weight:800;flex:none;border:3px solid #0d0f12}
+.nm b{display:block}.nm em{font-style:normal;font-size:12px;color:#8d95a3}
+.node.done .dot{background:#2f8f5b}.node.cur .dot{background:#ff6b2c;box-shadow:0 0 0 4px #ff6b2c44}.node.lock{opacity:.6}
+nav{position:fixed;left:0;right:0;bottom:0;background:#12151ae6;backdrop-filter:blur(8px);display:flex;justify-content:center;gap:2px;padding:8px;border-top:1px solid #20242c}
+nav button{flex:1;max-width:110px;background:none;border:0;color:#8d95a3;padding:10px 4px;border-radius:10px;font-weight:700;cursor:pointer}nav button.on{color:#fff;background:#20242c}
+.scrim{position:fixed;inset:0;background:#000a;z-index:5}
+.panel{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);background:#12151a;z-index:6;padding:18px;overflow:auto}
+.panel.center{left:50%;right:auto;top:5%;bottom:auto;max-height:90%;transform:translateX(-50%);border-radius:18px;width:min(520px,94%)}
+.x{background:none;border:0;color:#eef0f3;font-size:28px;cursor:pointer}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.opt{background:#20242c;border:2px solid #2a2f39;color:#eef0f3;border-radius:12px;padding:12px;text-align:left;cursor:pointer}
+.opt.on{border-color:#ff6b2c;background:#2a1d15}.opt em{display:block;font-style:normal;font-size:12px;color:#8d95a3;margin-top:3px}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}.form label{font-size:12px;color:#8d95a3;display:block}.form input,.form select{margin-top:4px}
+@media(max-width:480px){.tm{grid-template-columns:1fr}}
+
+.auth{max-width:380px;margin:0 auto;padding:60px 4px;text-align:center}.brand.big{font-size:34px;margin-bottom:6px}.auth .seg{display:inline-flex;margin:14px 0}
+.form.one{grid-template-columns:1fr;text-align:left}.err{color:#ff6b6b}textarea{width:100%;background:#20242c;color:#eef0f3;border:1px solid #2a2f39;border-radius:10px;padding:8px;font-size:11px}
+nav{padding-bottom:calc(8px + env(safe-area-inset-bottom))}header{padding-top:calc(14px + env(safe-area-inset-top))}
+input,select,textarea{font-size:16px}button{-webkit-tap-highlight-color:transparent}html{-webkit-text-size-adjust:100%}
+</style></head><body><div id="app"></div><script>// name, category, difficulty(1-100), description, 3 self-tests, gym drills, floor drills (null = same as gym)
+const S=(n,c,d,why,t,g,f)=>({n,c,d,why,t,g,f:f||g});
+const SKILLS=[
+S("Perfect Push-up","push",5,"The foundation of every pushing skill. Rigid body, full range, no sagging.",
+ ["20 push-ups in a row, chest to a fist-height, body in a straight line","3 sets of 15 with 60s rest","10 push-ups with a 3-second lowering phase"],
+ ["Tempo Push-up (3s down)|4|8","Scapular Push-up|3|12","Dumbbell Bench Press|3|10"],
+ ["Tempo Push-up (3s down)|4|8","Incline Push-up Negatives|3|8","Scapular Push-up|3|12"]),
+S("Deep Squat & Bodyweight Squat","legs",8,"Builds knees, hips and ankles for every leg skill later. Depth over speed.",
+ ["40 bodyweight squats, full depth, heels down","Hold a deep squat for 60 seconds, heels flat","Squat with arms overhead and no wall support, heels down"],
+ ["Goblet Squat|4|10","Deep Squat Hold|3|45s","Barbell Back Squat (light)|3|8"],
+ ["Tempo Squat (3s down)|4|12","Deep Squat Hold|3|45s","Cossack Squat|3|8/side"]),
+S("Plank & Hollow Body","core",10,"The hollow body is the shape behind every lever, handstand and planche.",
+ ["Hollow body hold 45s with lower back glued to floor","Plank 90s without hips sagging","Side plank 45s each side"],
+ ["Hollow Hold|4|25s","Cable Crunch|3|12","Ab Wheel Rollout (knees)|3|8"],
+ ["Hollow Hold|4|25s","Dead Bug|3|12/side","Side Plank|3|30s"]),
+S("Inverted Row","pull",12,"First real pulling strength. Pull your chest to the bar with a straight body.",
+ ["15 rows with body straight, chest touches the bar","Dead hang 45 seconds","10 scapular pull-ups (shoulder blades only)"],
+ ["Inverted Row (low bar)|4|8","Dead Hang|3|30s","Lat Pulldown|3|10"],
+ ["Doorframe Towel Row (feet in front)|4|8","Under-Table Row (sturdy table)|3|8","Superman Lat Pull (floor)|3|12"]),
+S("Strict Pull-up","pull",18,"Chin over bar, dead hang start, zero swing. The gateway to all bar skills.",
+ ["10 strict pull-ups, no kipping","5 negatives with a 5-second lowering","Dead hang 60 seconds"],
+ ["Pull-up (or assisted)|5|4","Negative Pull-up (5s)|3|4","Lat Pulldown|3|10"],
+ ["Towel Doorframe Pull (feet assist)|4|6","Jump-up Negative Pull-up (playground/branch if available)|3|4","Superman Lat Pull (floor)|3|12"]),
+S("Dips","push",20,"Builds chest, triceps and front delts, and the support strength for muscle-ups.",
+ ["15 full-depth dips","3 sets of 10 with 60s rest","Lower in 4 seconds for 8 reps"],
+ ["Parallel Bar Dip|4|8","Negative Dip (4s)|3|5","Support Hold|3|20s"],
+ ["Two-Chair Dip|4|8","Bench/Couch Dip (feet elevated)|3|12","Deep Push-up (hands on books)|3|10"]),
+S("Crow & Frog Stand","balance",22,"Your first arm balance. Teaches wrist strength and shifting weight forward.",
+ ["Crow pose 30 seconds","Frog stand 30 seconds","Lean forward until toes feel light, 5 times"],
+ ["Crow Hold|5|15s","Frog Stand|4|15s","Wrist Push-ups|3|10"]),
+S("Wall Handstand","balance",28,"Learn the straight line and overhead stacking. Chest to wall for the best form.",
+ ["Chest-to-wall handstand 45 seconds","5 clean kick-ups into a stack","Wall walks up and down 5 times"],
+ ["Chest-to-Wall Handstand|4|20s","Pike Push-up (feet on box)|3|8","Wall Walks|3|4"],
+ ["Chest-to-Wall Handstand|4|20s","Wall Walks|3|4","Shoulder Taps in Plank|3|20"]),
+S("Hanging Leg Raise","core",30,"Strong abs and hip flexors, essential for L-sit and levers.",
+ ["10 strict hanging knee raises","10 straight-leg raises to 90 degrees","Dead hang 60 seconds"],
+ ["Hanging Knee Raise|4|8","Captain's Chair Leg Raise|3|10","Toes-to-Bar Negatives|3|4"],
+ ["Lying Leg Raise|4|12","Reverse Crunch|3|12","Hollow Rock|3|20s"]),
+S("L-sit","core",35,"Compression strength plus tricep and shoulder support.",
+ ["L-sit hold 15 seconds with legs straight","Tuck L-sit 30 seconds","5 seated pike compression lifts"],
+ ["Parallel Bar L-sit|5|10s","Tuck L-sit|4|15s","Seated Pike Lifts|3|8"],
+ ["Floor L-sit (hands on floor)|5|8s","Tuck L-sit|4|15s","Pike Compression Lifts|3|8"]),
+S("Wall Handstand Push-up","push",40,"Vertical pressing builds huge shoulders. Go deeper as you get stronger.",
+ ["5 full-range wall handstand push-ups","15 elevated pike push-ups","Wall handstand 60 seconds"],
+ ["Wall HSPU Negatives|4|3","Dumbbell Overhead Press|3|8","Elevated Pike Push-up|4|8"],
+ ["Elevated Pike Push-up|4|8","HSPU Negatives|3|3","Wall Handstand Hold|3|30s"]),
+S("Archer Push-up","push",42,"Unilateral pushing that bridges to one-arm push-ups and planche.",
+ ["8 archer push-ups each side, straight working arm","3 sets of 5 each side","Slow 3s lowering on each side x5"],
+ ["Archer Push-up|4|5/side","Weighted Push-up|3|8","Cable Chest Fly|3|12"],
+ ["Archer Push-up|4|5/side","Wide Push-up|3|12","Typewriter Push-up|3|4/side"]),
+S("Pistol Squat","legs",45,"One-legged strength, balance, ankle and hip mobility.",
+ ["5 pistol squats per leg, full depth, no holding on","5 shrimp squats per leg","Knee-over-toe ankle test: 10 reps with heel down"],
+ ["Assisted Pistol (hold a post/TRX)|4|5/side","Bulgarian Split Squat (DB)|3|8/side","Single-Leg Leg Press|3|10/side"],
+ ["Pistol to Box|4|5/side","Bulgarian Split Squat|3|10/side","Cossack Squat|3|8/side"]),
+S("Chest-to-Bar Pull-up","pull",48,"Explosive pulling is the heart of the muscle-up.",
+ ["5 chest-to-bar pull-ups","10 explosive pull-ups","Add 10% bodyweight: 5 pull-ups"],
+ ["Explosive Pull-up|5|3","Weighted Pull-up|4|5","Chest-to-Bar Negatives|3|4"],
+ ["Explosive Towel Pull|4|5","Superman Lat Pull (floor)|3|12","Under-Table Row (feet elevated)|3|10"]),
+S("Clap Push-up","push",50,"Explosive power in the chest and shoulders.",
+ ["Push-up with hands fully off the floor, 5 reps","3 clap push-ups in a row","Land softly with elbows bent"],
+ ["Explosive Push-up|4|5","Clap Push-up|4|3","Speed Bench Press (60% BW)|4|5"],
+ ["Explosive Push-up|4|5","Clap Push-up|4|3","Pseudo Planche Push-up|3|6"]),
+S("Bar Muscle-up","mixed",58,"The signature skill. Pull high, fast transition, press out.",
+ ["5 chest-to-bar pull-ups and 15 dips","8 straight-bar dips","Clean transition drill 5 times"],
+ ["Muscle-up Negative|4|3","Straight-Bar Dip|4|8","Explosive High Pull|4|4"],
+ ["Explosive Towel Pull|4|5","Bench Dip (feet elevated)|4|12","Muscle-up Transition (playground bar when available)|3|4"]),
+S("Tuck Planche","push",62,"Horizontal pressing balance. Lean forward over your hands.",
+ ["Tuck planche 10 seconds","Planche lean 30 seconds","10 pseudo planche push-ups"],
+ ["Tuck Planche Hold|5|8s","Planche Lean|4|20s","Pseudo Planche Push-up|4|8"]),
+S("Freestanding Handstand","balance",64,"Balance on your hands with no wall. Endless control practice.",
+ ["Freestanding handstand 30 seconds","5 kick-ups held 10s each","Hollow-body line with no banana back"],
+ ["Kick-up Balance Drills|6|1 min","Handstand Shoulder Taps|3|10","Wall Handstand Hold|3|40s"]),
+S("Tuck Front Lever","pull",66,"Horizontal pulling. Straight arms, depressed shoulders.",
+ ["Tuck front lever 15 seconds","10 inverted hang raises","Inverted hang 30 seconds"],
+ ["Tuck Front Lever|5|8s","Tuck FL Raise|3|5","Inverted Hang|3|20s"],
+ ["Hollow Hold (arms overhead)|4|25s","Under-Table Row (feet elevated)|4|8","Superman Lat Pull (floor)|3|12"]),
+S("Back Lever","pull",68,"Shoulder extension strength. Needs patient shoulder prep.",
+ ["Tuck back lever 15 seconds","Skin the cat 5 times","German hang 20 seconds, pain-free"],
+ ["Skin the Cat|4|4","Tuck Back Lever|5|8s","German Hang|3|20s"],
+ ["Reverse Plank Hold|4|30s","Superman Hold|3|30s","Skin the Cat (bar when available)|3|4"]),
+S("Dragon Flag","core",70,"Brutal anti-extension core strength. Makes abs look carved.",
+ ["5 negatives with 5-second lowering","8 tuck dragon flags","Straight dragon flag hold 3 seconds"],
+ ["Dragon Flag Negative|4|4","Tuck Dragon Flag|4|6","Weighted Decline Sit-up|3|10"],
+ ["Dragon Flag Negative (hold furniture)|4|4","Tuck Dragon Flag|4|6","Hollow Hold|3|40s"]),
+S("Human Flag","mixed",72,"Side-body power, lats and obliques. A true spectacle.",
+ ["Tuck human flag 10 seconds","Side plank 90 seconds each side","Vertical flag 5 seconds"],
+ ["Tuck Human Flag (pole/rack)|5|6s","Side Plank|3|45s","Hanging Oblique Raise|3|8/side"],
+ ["Side Plank with Leg Raise|4|10/side","Copenhagen Plank|3|20s","Tuck Flag Practice (post or pole if available)|3|6s"]),
+S("Archer Pull-up","pull",74,"One-arm strength is within reach. Each side pulls its share.",
+ ["5 archer pull-ups each side","Weighted pull-up +25% BW x3","Typewriter pull-up 3 each side"],
+ ["Archer Pull-up|4|4/side","Weighted Pull-up|4|4","Typewriter Pull-up|3|3/side"],
+ ["Archer Towel Row|4|6/side","Superman Lat Pull (floor)|3|12","One-Arm Towel Row|3|6/side"]),
+S("One-Arm Push-up","push",76,"Single-arm pressing and anti-rotation core strength.",
+ ["3 one-arm push-ups each arm with feet wide","Archer push-up 8/side with straight arm","Slow 5s negative each arm"],
+ ["One-Arm Push-up Negative|4|3/side","Archer Push-up|4|6/side","One-Arm Dumbbell Press|3|8/side"],
+ ["One-Arm Push-up Negative|4|3/side","Archer Push-up|4|6/side","Staggered Hand Push-up|3|10/side"]),
+S("Ring Muscle-up","mixed",78,"Unstable transition with a deep false grip. Cleaner and harder than the bar.",
+ ["3 ring muscle-ups with false grip","False grip hang 45 seconds","10 deep ring dips"],
+ ["False Grip Pull-up|4|4","Ring Dip|4|8","Ring Muscle-up Negative|3|3"],
+ ["False Grip Towel Hang|4|20s","Bench Dip (feet elevated)|4|12","Explosive Towel Pull|3|5"]),
+S("Straddle Front Lever","pull",80,"Longer lever, bigger lats. Hips high, body flat.",
+ ["Straddle front lever 8 seconds","Advanced tuck 12 seconds","5 front lever raises (tuck)"],
+ ["Straddle Front Lever|5|6s","Advanced Tuck FL|4|8s","Front Lever Raise|3|4"],
+ ["Hollow Hold (arms overhead)|4|30s","Under-Table Row (feet elevated)|4|8","Superman Lat Pull (floor)|3|12"]),
+S("Straddle Planche","push",82,"Serious shoulder, wrist and core strength. Lean hard.",
+ ["Straddle planche 5 seconds","Advanced tuck 15 seconds","Planche lean 45 seconds on fingertips"],
+ ["Straddle Planche|5|5s","Advanced Tuck Planche|4|8s","Planche Lean|4|20s"]),
+S("Freestanding Handstand Push-up","push",85,"Push yourself through space while balancing.",
+ ["3 freestanding HSPUs","8 wall HSPU deficit","Freestanding handstand 45 seconds"],
+ ["Freestanding HSPU Negative|4|2","Wall HSPU (deficit)|4|5","Handstand Hold|3|40s"]),
+S("One-Arm Pull-up","pull",88,"Elite pulling strength. Needs very strong tendons, so be patient.",
+ ["Archer pull-up 8/side","1 slow negative each arm for 5s","Weighted pull-up +50% BW x1"],
+ ["One-Arm Negative|4|2/side","Weighted Pull-up|4|3","Archer Pull-up|3|5/side"],
+ ["One-Arm Towel Row|4|6/side","Archer Towel Row|4|6/side","Superman Lat Pull (floor)|3|12"]),
+S("Full Front Lever","pull",91,"The straight body lever. Total back, core and shoulder power.",
+ ["Full front lever 5 seconds","Straddle front lever 12 seconds","3 front lever pull-ups (straddle)"],
+ ["Full Front Lever|5|5s","Straddle FL Raise|3|4","Front Lever Row|3|4"],
+ ["Hollow Hold (arms overhead)|4|40s","Under-Table Row (feet elevated)|4|8","Dragon Flag Negative|3|4"]),
+S("Full Planche","push",94,"One of the hardest static skills. Straight body above your hands.",
+ ["Full planche 5 seconds","Straddle planche 12 seconds","5 pseudo planche push-ups with feet elevated"],
+ ["Full Planche|5|4s","Straddle Planche|4|8s","Planche Lean|4|25s"]),
+S("Planche Push-up","push",97,"Press in planche position. A true pinnacle of pushing.",
+ ["1 clean planche push-up","3 straddle planche push-ups","Planche 10 seconds"],
+ ["Planche Push-up (straddle/tuck)|5|2","Planche Hold|4|8s","Pseudo Planche Push-up (feet elevated)|3|8"]),
+S("Iron Cross","pull",99,"The final boss. Straight-arm strength on rings, built over years.",
+ ["Assisted iron cross 5s","Ring support turned out 30s","Ring flyes 8 reps with straight arms"],
+ ["Ring Cross Hold (assisted)|5|4s","Ring Turned-Out Support|4|20s","Ring Fly|3|6"],
+ ["Straight-Arm Pulldown Pattern (towel floor)|4|10","Reverse Plank|3|40s","Ring practice (rings recommended)|3|4"]),
+];
+// Support work by pattern, tiers easy -> hard (tier rises as you progress along the path)
+const POOL={
+push:{
+ gym:["Machine Chest Press|3|12","Dumbbell Bench Press|3|10","Incline Dumbbell Press|3|10","Weighted Dip|4|8","Barbell Bench Press|4|6","Weighted Push-up|4|8"],
+ floor:["Incline Push-up|3|12","Push-up|3|15","Diamond Push-up|3|10","Archer Push-up|3|6","Pseudo Planche Push-up|4|6","Decline Push-up (feet up)|4|10"]},
+pull:{
+ gym:["Lat Pulldown|3|12","Seated Cable Row|3|12","Pull-up|4|6","Weighted Pull-up|4|5","Chest-Supported DB Row|3|10","Barbell Row|4|8"],
+ floor:["Superman Lat Pull|3|15","Doorframe Towel Row|3|10","Under-Table Row|3|10","Towel Row (feet elevated)|4|8","One-Arm Towel Row|3|6/side","Prone Y-T-W Raise|3|12"]},
+quads:{
+ gym:["Leg Press|3|12","Goblet Squat|3|12","Barbell Back Squat|4|8","Bulgarian Split Squat|3|8/side","Walking Lunge (DB)|3|12/side","Leg Extension|3|12"],
+ floor:["Bodyweight Squat|3|20","Reverse Lunge|3|12/side","Bulgarian Split Squat|3|10/side","Jump Squat|3|10","Shrimp Squat Progression|3|5/side","Wall Sit|3|45s"]},
+post:{
+ gym:["Romanian Deadlift (DB)|3|10","Hip Thrust|3|10","Lying Leg Curl|3|12","Barbell RDL|4|8","Cable Pull-through|3|12","Back Extension|3|12"],
+ floor:["Glute Bridge|3|15","Single-Leg Glute Bridge|3|10/side","Hamstring Walkout|3|8","Nordic Curl Negative|3|4","Good Morning (bodyweight)|3|15","Back Extension (floor)|3|12"]},
+core:{
+ gym:["Cable Crunch|3|12","Plank|3|45s","Ab Wheel Rollout|3|8","Hanging Leg Raise|3|10","Pallof Press|3|10/side","Hollow Hold|3|30s"],
+ floor:["Dead Bug|3|10/side","Plank|3|45s","Hollow Hold|3|25s","V-up|3|12","Side Plank|3|30s","Hollow Rock|3|20s"]},
+delts:{
+ gym:["Dumbbell Lateral Raise|3|15","Rear Delt Fly|3|15","Overhead Press|3|8","Cable Lateral Raise|3|15","Face Pull|3|15","Arnold Press|3|10"],
+ floor:["Pike Push-up|3|8","Prone Y Raise|3|12","Lateral Raise (backpack)|3|15","Pike Hold|3|30s","Wall Handstand Shrugs|3|10","Elevated Pike Push-up|3|8"]},
+arms:{
+ gym:["Dumbbell Curl|3|12","Cable Tricep Pushdown|3|12","Hammer Curl|3|12","Overhead Tricep Extension|3|12","Incline Curl|3|10","Skullcrusher|3|10"],
+ floor:["Close-Grip Push-up|3|10","Backpack Curl|3|12","Bench Tricep Dip|3|12","Towel Isometric Curl|3|20s","Diamond Push-up|3|8","Tricep Extension (bodyweight)|3|10"]},
+calves:{
+ gym:["Standing Calf Raise|3|15"],floor:["Single-Leg Calf Raise|3|15"]}
+};
+// 0 = Sunday
+const DAYS={
+ 1:{name:"Push Power",tag:"push",pat:["push","delts","core","arms"],intensity:"standard"},
+ 2:{name:"Pull & Arms",tag:"pull",pat:["pull","arms","core","delts"],intensity:"standard"},
+ 3:{name:"Legs & Core",tag:"legs",pat:["quads","post","core","calves"],intensity:"heavy"},
+ 4:{name:"Skill Day",tag:"skill",pat:["push","pull","core"],intensity:"heavy",skillBoost:true},
+ 5:{name:"Upper Body Build",tag:"upper",pat:["push","pull","delts","arms"],intensity:"standard"},
+ 6:{name:"Legs, Core & Skill",tag:"legs",pat:["post","quads","core","calves"],intensity:"heavy"},
+ 0:{name:"Recovery & Flexibility",tag:"rest",pat:[],intensity:"rest"}
+};
+// Mobility: warm-ups and flexibility by day. name|seconds-or-reps
+const WARM={
+ base:["Wrist Circles & Rocks|40s","Cat-Cow|10 reps","Arm Circles|10/dir","Scapular Push-ups|10 reps","Hip Circles|10/dir","Bodyweight Squat|10 reps"],
+ push:["Wrist Prep Rocks (all 4 directions)|60s","Shoulder Dislocates (band/towel)|10 reps","Thoracic Rotations|8/side"],
+ pull:["Dead Hang or Floor Scap Retractions|30s","Shoulder Dislocates (band/towel)|10 reps","Cat-Cow|10 reps"],
+ legs:["Hip 90/90 Switches|8/side","Ankle Rocks|10/side","Deep Squat Pry|45s"],
+ skill:["Wrist Prep Rocks (all 4 directions)|60s","Hollow Body Rocks|10 reps","Shoulder Dislocates (band/towel)|10 reps"],
+ upper:["Wrist Circles & Rocks|40s","Shoulder Dislocates (band/towel)|10 reps","Thoracic Rotations|8/side"],
+ rest:["Easy Walk or Light Cycling|5 min"]
+};
+const FLEX={
+ 1:{focus:"Shoulders & Wrists",items:["Doorway Chest Stretch|45s/side","Overhead Shoulder Flexion (wall)|60s","Wrist Extension Stretch|40s","Wrist Flexion Stretch|40s","Thread the Needle|45s/side","Sleeper Stretch|40s/side"]},
+ 2:{focus:"Hips & Hamstrings",items:["Couch Stretch|60s/side","Pigeon Pose|60s/side","Standing Forward Fold|60s","Seated Pike Fold|60s","Frog Stretch|60s","Hip 90/90|45s/side"]},
+ 3:{focus:"Hips & Ankles",items:["Deep Squat Hold|60s","Cossack Stretch|45s/side","Ankle Dorsiflexion (wall)|45s/side","Pigeon Pose|60s/side","Low Lunge|45s/side","Calf Stretch|45s/side"]},
+ 4:{focus:"Thoracic & Shoulders",items:["Thoracic Extension over Roller/Rolled Towel|60s","Child's Pose with Reach|60s","Thread the Needle|45s/side","Bridge Prep (wall)|45s","Lat Stretch (hang or doorway)|45s/side","Cat-Cow|10 reps"]},
+ 5:{focus:"Splits & Pancake",items:["Half Split|60s/side","Front Split Hold (supported)|60s/side","Pancake Fold|60s","Butterfly|60s","Straddle Stretch|60s","Hamstring Floor Stretch|45s/side"]},
+ 6:{focus:"Spine & Bridge",items:["Cobra / Upward Dog|45s","Wall Bridge Hold|30s","Bridge Pushups (if ready)|5 reps","Child's Pose|60s","Supine Twist|45s/side","Hip Flexor Lunge|60s/side"]},
+ 0:{focus:"Full-Body Flexibility Flow",items:["Cat-Cow|10 reps","Downward Dog Flow|60s","Low Lunge|45s/side","Pigeon Pose|60s/side","Seated Pike Fold|60s","Pancake Fold|60s","Doorway Chest Stretch|45s/side","Thread the Needle|45s/side","Bridge Prep|45s","Deep Squat Hold|60s"]}
+};
+const FLEXGOALS=["Touch toes with straight legs","Deep squat hold 2 min, heels down","Pike compression: chest to thighs","Pancake: chest to floor","Front splits (both sides)","Middle split","Full bridge","Shoulder dislocates with narrow grip","Wrists: flat palms, fingers back 90 degrees","Pigeon: front shin parallel, chest down"];
+// Nutrition (general food groups only)
+const NUT={
+ heavy:{label:"Fuel Up (Carb-Heavy Day)",focus:["Load up on carbs: rice, oats, potatoes, pasta, fruit, bread","Include a solid protein source: eggs, chicken, fish, dairy, tofu, beans","Add veggies and a little fat, but keep fat lighter pre-workout"],before:"Eat a full meal of carbs + protein 2 to 3 hours before training.",snack:"If training sooner, have a light carb snack (fruit, toast) 45 to 60 minutes before.",after:"Within 2 hours: protein + carbs (e.g. meat/eggs/beans with rice or potatoes), plus veggies."},
+ standard:{label:"Balanced Day",focus:["Balanced plate: roughly 1/3 protein, 1/3 carbs, 1/3 veggies/fruit","Lots of protein across the day (3 to 4 meals)","Keep fats moderate; healthy fats like nuts, olive oil, avocado"],before:"Eat a moderate meal with carbs + protein 2 hours before.",snack:"If training sooner, a small carb snack (banana, rice cakes) 30 to 60 minutes before.",after:"Within 2 hours: a protein-rich meal with some carbs."},
+ light:{label:"Light Day",focus:["Light, easy-to-digest meal; keep protein up","Fruit, yogurt, eggs, lean protein, veggies","Don't skip carbs entirely; small portion is fine"],before:"Have a light snack (fruit, yogurt, toast) 30 to 60 minutes before. Skip a heavy meal.",snack:"If training immediately, just water and maybe a small piece of fruit.",after:"A normal meal with protein afterwards; don't undereat."},
+ rest:{label:"Recovery Day",focus:["Prioritize protein and veggies for recovery","Moderate carbs, no need to overeat","Plenty of water; whole foods"],before:"No training fuel needed. For the flexibility flow, a light snack at most.",snack:"Eat when hungry; keep meals regular.",after:"Protein with each meal to support repair."}
+};
+const RANKS=["Recruit","Novice","Apprentice","Athlete","Warrior","Elite","Master","Legend"];
+const $=s=>document.querySelector(s);
+
+const def={setup:false,prof:{age:25,h:175,w:72,units:'metric',exp:'beginner'},equip:'floor',idx:0,tests:{},checkin:{},logs:{},xp:0,flex:[],view:'today'};
+const lsg=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
+const lss=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+const canStore=()=>{try{localStorage.setItem('cq.t','1');return localStorage.getItem('cq.t')==='1'}catch(e){return false}};
+let USER=null,KEY='',st=Object.assign({},def);
+function loadUser(u){USER=u;KEY='calisquest.v1.'+u;let m=null;try{m=JSON.parse(lsg(KEY)||'null')}catch(e){}st=Object.assign({},JSON.parse(JSON.stringify(def)),m||{});ui.onboard=!st.setup;lss('cq.session',u)}
+const save=()=>{if(USER)lss(KEY,JSON.stringify(st))};
+const dk=(d=new Date())=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const N=SKILLS.length;
+let ui={settings:false,onboard:false,modal:null,flexMin:10,custom:false,mode:'signup',err:''};
+const users=()=>{try{return JSON.parse(lsg('cq.users')||'{}')}catch(e){return{}}};
+async function hash(s){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){let h=5381;for(const c of s)h=(h*33^c.charCodeAt(0))>>>0;return'f'+h}}
+function authView(){const su=ui.mode==='signup';return `<div class="auth"><div class="brand big"><b>CALIS</b>QUEST</div><p class="mut">Learn every calisthenics skill. Get insanely strong. Look the part.</p><div class="seg"><button data-a="amode" data-v="signup" class="${su?'on':''}">Create account</button><button data-a="amode" data-v="login" class="${su?'':'on'}">Log in</button></div><div class="form one"><label>Username<input id="au" autocomplete="username" autocapitalize="none"></label><label>Password<input id="ap" type="password" autocomplete="${su?'new-password':'current-password'}"></label></div>${ui.err?`<p class="err">${ui.err}</p>`:''}<button class="btn big" data-a="auth">${su?'Create account':'Log in'}</button>${canStore()?'':'<p class="err">This page blocks saving data, so accounts and progress cannot be kept here. Open the app from a regular website address (not inside a preview frame).</p>'}<p class="mut sm">Accounts are stored on this device. Use Settings > Backup to move your progress to another device.</p></div>`}
+
+// ---------- fitness model ----------
+const bmi=()=>st.prof.w/Math.pow(st.prof.h/100,2);
+function mult(){const p=st.prof;let m={beginner:.8,intermediate:1,advanced:1.15}[p.exp]||1;
+ m*=p.age<30?1:p.age<45?.95:p.age<60?.85:.7;const b=bmi();m*=b<25?1:b<30?.92:b<35?.82:.7;return Math.max(.45,Math.min(1.2,m));}
+const restSec=()=>st.prof.age>=45?90:60;
+const levelName=()=>{const m=mult();return m>=1.05?'Strong start':m>=.85?'Solid base':m>=.65?'Building phase':'Gentle start'};
+const rank=()=>RANKS[Math.min(RANKS.length-1,Math.floor(st.idx/4.2))];
+function sc(r,m){const x=/^(\d+)(.*)$/.exec(r);return x?Math.max(1,Math.round(x[1]*m))+x[2]:r}
+function parseEx(s,m,tag){const [n,sets,reps]=s.split('|');let S=+sets;if(tag==='sup'&&m<.7&&S>=3)S--;return{n,sets:S,reps:sc(reps,m)}}
+function exMin(e,r){let w=10;const x=/^(\d+)\s*(s|min)?/.exec(e.reps);if(x){w=x[2]==='s'?+x[1]:x[2]==='min'?+x[1]*60:+x[1]*3.5}const per=/side/.test(e.reps)?2:1;return e.sets*(w*per+r)/60}
+function fill(list,b,r,minN){const o=[];let u=0;for(const e of list){const t=exMin(e,r);if(o.length>=minN&&u+t>b)continue;o.push(e);u+=t;if(u>=b&&o.length>=minN)break}return o}
+const lbl={push:'Push',pull:'Pull',quads:'Quads',post:'Glutes & Hamstrings',core:'Core',delts:'Shoulders',arms:'Arms',calves:'Calves'};
+
+function build(){
+ const wd=new Date().getDay(),plan=DAYS[wd],ci=st.checkin[dk()];if(!ci)return null;
+ const T=ci.time;const m=mult()*(ci.energy==='low'?.85:ci.energy==='high'?1.05:1);const R=restSec(),eq=st.equip,sk=SKILLS[st.idx];
+ const out={plan,T,m,blocks:[],wd};
+ if(plan.tag==='rest'){
+  const f=FLEX[0],cnt=Math.min(f.items.length,Math.max(3,Math.round(T/1.8)));
+  out.blocks.push({id:'flow',title:'Flexibility Flow: '+f.focus,min:T,items:f.items.slice(0,cnt).map(x=>{const[n,r]=x.split('|');return{n,reps:r}})});
+  return out}
+ const warm=T<25?4:T<45?6:8,cool=T<25?3:T<45?5:8;
+ let w=[...new Set([...(WARM[plan.tag]||[]),...WARM.base])].slice(0,Math.max(3,warm));
+ out.blocks.push({id:'warm',title:'Warm-up & Mobility',min:warm,items:w.map(x=>{const[n,r]=x.split('|');return{n,reps:r}})});
+ const main=T-warm-cool,skMin=Math.round(main*(plan.skillBoost?.55:.35)),ms=(1+m)/2;
+ const drills=fill((eq==='gym'?sk.g:sk.f).map(s=>parseEx(s,ms)),skMin,90,skMin>=10?2:1);
+ out.blocks.push({id:'skill',title:'Skill Work: '+sk.n,min:skMin,items:drills,rest:90});
+ const tier=Math.max(0,Math.min(5,Math.floor(st.idx/5.5)-(m<.75?1:0)));
+ const names=new Set(drills.map(d=>d.n)),cand=[];
+ for(let pass=0;pass<2;pass++)for(const p of plan.pat){const a=POOL[p][eq];let t=pass===0?tier:(tier>0?tier-1:1);t=Math.min(t,a.length-1);const e=parseEx(a[t],m,'sup');if(names.has(e.n))continue;names.add(e.n);e.tag=lbl[p];cand.push(e)}
+ const sup=fill(cand,main-skMin,R,2);
+ out.blocks.push({id:'str',title:'Strength & Aesthetics',min:main-skMin,items:sup,rest:R});
+ const f=FLEX[wd],cnt=Math.max(2,Math.round(cool/1.5));
+ out.blocks.push({id:'cool',title:'Flexibility Cool-down: '+f.focus,min:cool,items:f.items.slice(0,cnt).map(x=>{const[n,r]=x.split('|');return{n,reps:r}})});
+ return out}
+
+function nutKey(plan,ci){if(plan.intensity==='rest')return'rest';if(!ci)return plan.intensity;if(ci.time<=20||ci.energy==='low')return'light';return plan.intensity}
+function log(){const k=dk();return st.logs[k]=st.logs[k]||{done:[],fin:false}}
+function streak(){let s=0,d=new Date();if(!(st.logs[dk(d)]||{}).fin)d.setDate(d.getDate()-1);while((st.logs[dk(d)]||{}).fin){s++;d.setDate(d.getDate()-1)}return s}
+function tests(){const k=SKILLS[st.idx].n;return st.tests[k]=st.tests[k]||[false,false,false]}
+function tips(sk){const t=[],b=bmi(),p=st.prof;
+ if(b>=28&&['pull','push','mixed','balance'].includes(sk.c))t.push('Higher bodyweight makes lever, planche and pulling skills harder. Progress will be slower at first, and that is normal. Strength-to-weight improves fast as you train and eat well.');
+ if(p.h>=188)t.push('Tall frame means longer levers. Stay on tuck and advanced-tuck variations a bit longer than the guides say.');
+ if(p.h<=165&&['pull','push'].includes(sk.c))t.push('Shorter levers are an advantage on planche and levers. Use it.');
+ if(p.age>=40)t.push('Extra warm-up time is built in. Keep straight-arm skills (levers, planche) to 2 to 3 sessions a week, and listen to elbows and shoulders.');
+ if(p.age<18)t.push('Keep reps clean and skip max-effort attempts. Stop sets with 1 to 2 reps in reserve.');
+ if(st.equip==='floor'&&['pull','mixed'].includes(sk.c))t.push('Floor mode: pulling drills use doorframe towel rows, tables and floor proxies. Test this skill on any real bar (playground, tree branch) when you can, or switch to Gym mode.');
+ return t}
+
+// ---------- views ----------
+const tabs=[['today','Today'],['quest','Quest'],['path','Path'],['flex','Flex'],['fuel','Fuel']];
+function header(){const pct=Math.round(st.idx/N*100);
+ return `<header><div class="brand"><b>CALIS</b>QUEST</div>
+ <div class="seg" title="Equipment"><button data-a="equip" data-v="floor" class="${st.equip==='floor'?'on':''}">Floor only</button><button data-a="equip" data-v="gym" class="${st.equip==='gym'?'on':''}">Full gym</button></div>
+ <button class="gear" data-a="settings" aria-label="Settings">&#9881;</button></header>
+ <div class="hud"><div><span class="rk">${rank()}</span> <span class="mut">Level ${Math.min(st.idx+1,N)} of ${N}</span></div><div class="mut">${st.xp} XP &middot; ${streak()} day streak</div></div>
+ <div class="bar"><i style="width:${pct}%"></i></div>`}
+function nav(){return `<nav>${tabs.map(([k,n])=>`<button data-a="view" data-v="${k}" class="${st.view===k?'on':''}">${n}</button>`).join('')}</nav>`}
+
+function checkinCard(){const ci=st.checkin[dk()]||{};const ts=[15,20,30,45,60,90];
+ return `<section class="card"><h2>Daily check-in</h2><p class="mut">How much time do you have today?</p>
+ <div class="chips">${ts.map(t=>`<button class="chip ${ci.time===t?'on':''}" data-a="time" data-v="${t}">${t} min</button>`).join('')}<button class="chip ${ui.custom||(ci.time&&!ts.includes(ci.time))?'on':''}" data-a="customtime">${ci.time&&!ts.includes(ci.time)?ci.time+' min':'Other'}</button></div>
+ ${ui.custom?`<div class="row"><input id="ct" type="number" min="10" max="180" placeholder="Minutes (10-180)"><button class="btn sm" data-a="setcustom">Set</button></div>`:''}
+ <p class="mut">Energy today?</p><div class="chips">${[['low','Low'],['normal','Normal'],['high','High']].map(([k,n])=>`<button class="chip ${ci.energy===k?'on':''}" data-a="energy" data-v="${k}">${n}</button>`).join('')}</div></section>`}
+
+function exRow(bid,e,i){const key=bid+':'+e.n;const on=log().done.includes(key);
+ return `<label class="ex ${on?'done':''}"><input type="checkbox" data-a="chk" data-k="${esc(key)}" ${on?'checked':''}><span class="ec"><b>${esc(e.n)}</b>${e.tag?`<em>${esc(e.tag)}</em>`:''}</span><span class="es">${e.sets?e.sets+' x ':''}${esc(e.reps)}</span></label>`}
+
+function today(){
+ const wd=new Date().getDay(),plan=DAYS[wd],ci=st.checkin[dk()],sk=SKILLS[st.idx];
+ let h=`<section class="hero"><div class="mut">${new Date().toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'})}</div><h1>${plan.name}</h1><p>Current quest: <b>${esc(sk.n)}</b> &middot; ${st.equip==='gym'?'Full gym':'Floor only'}</p></section>`;
+ h+=checkinCard();
+ if(!ci||!ci.time||!ci.energy){return h+`<p class="mut pad">Pick your time and energy to unlock today's workout.</p>`}
+ const w=build();
+ h+=nutCard(plan,ci,true);
+ h+=`<section class="fit"><span>${levelName()}</span><span class="mut">Strength tuning x${mult().toFixed(2)} &middot; BMI ${bmi().toFixed(1)} &middot; rest ${restSec()}s</span></section>`;
+ let total=0,did=0;
+ w.blocks.forEach(b=>{h+=`<section class="card"><div class="bh"><h2>${esc(b.title)}</h2><span class="mut">~${b.min} min</span></div>${b.items.map((e,i)=>{total++;if(log().done.includes(b.id+':'+e.n))did++;return exRow(b.id,e,i)}).join('')}${b.rest?`<p class="mut sm">Rest ${b.rest}s between sets.</p>`:''}</section>`});
+ const L=log();
+ h+=`<div class="prog"><div class="bar"><i style="width:${total?did/total*100:0}%"></i></div><span class="mut">${did}/${total} done</span></div>`;
+ h+=L.fin?`<div class="win">Workout complete. +${L.xp||0} XP earned. Rest, eat, sleep.</div>`:`<button class="btn big" data-a="finish">Finish workout</button>`;
+ return h}
+
+function nutCard(plan,ci,short){const n=NUT[nutKey(plan,ci)];
+ return `<section class="card nut"><div class="bh"><h2>Fuel: ${n.label}</h2></div><ul>${n.focus.map(x=>`<li>${x}</li>`).join('')}</ul>
+ <div class="tm"><div><b>Before</b><p>${n.before}</p><p class="mut sm">${n.snack}</p></div><div><b>After</b><p>${n.after}</p></div></div>
+ <p class="mut sm">${ci?`Based on your ${ci.time}-minute, ${ci.energy}-energy day.`:'Check in on the Today tab to tailor this.'} General guidance only, not medical advice.</p></section>`}
+function fuel(){const wd=new Date().getDay(),plan=DAYS[wd],ci=st.checkin[dk()];
+ return `<section class="hero"><h1>Nutrition</h1><p class="mut">Keep it simple: food groups, not calorie counting. Aim for protein at every meal, carbs around training, plenty of water, and 7 to 9 hours of sleep.</p></section>`+nutCard(plan,ci)+
+ `<section class="card"><h2>Weekly pattern</h2>`+[1,2,3,4,5,6,0].map(d=>{const k=nutKey(DAYS[d]),n=NUT[k];return `<div class="wk"><b>${['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d]}</b><span>${DAYS[d].name}</span><em>${n.label}</em></div>`}).join('')+`</section>`}
+
+function quest(){const sk=SKILLS[st.idx];if(!sk)return `<section class="hero"><h1>Legend</h1><p>You finished every skill on the path.</p></section>`;
+ const t=tests(),c=t.filter(Boolean).length;const nx=SKILLS.slice(st.idx+1,st.idx+4);
+ return `<section class="hero"><div class="mut">Level ${st.idx+1} &middot; ${sk.c.toUpperCase()} &middot; Difficulty ${sk.d}/100</div><h1>${esc(sk.n)}</h1><p>${esc(sk.why)}</p><div class="bar"><i style="width:${sk.d}%"></i></div></section>
+ <section class="card"><div class="bh"><h2>Self-evaluation</h2><span class="mut">${c}/3 passed</span></div><p class="mut">Test yourself honestly. Tick each when you can do it cleanly.</p>
+ ${sk.t.map((x,i)=>`<label class="ex ${t[i]?'done':''}"><input type="checkbox" data-a="test" data-i="${i}" ${t[i]?'checked':''}><span class="ec"><b>${esc(x)}</b></span></label>`).join('')}
+ <button class="btn big" data-a="advance" ${c<3?'disabled':''}>${c<3?'Pass all 3 tests to unlock the next skill':'Skill mastered. Advance!'}</button></section>
+ <section class="card"><h2>Drills (${st.equip==='gym'?'Gym':'Floor'})</h2>${(st.equip==='gym'?sk.g:sk.f).map(s=>{const e=parseEx(s,(1+mult())/2);return `<div class="ex"><span class="ec"><b>${esc(e.n)}</b></span><span class="es">${e.sets} x ${esc(e.reps)}</span></div>`}).join('')}
+ <p class="mut sm">Reps are tuned to your age, weight and experience. Train these 3 to 6 times a week via your daily plan.</p></section>
+ ${tips(sk).length?`<section class="card"><h2>Notes for your body</h2>${tips(sk).map(x=>`<p class="tip">${esc(x)}</p>`).join('')}</section>`:''}
+ ${nx.length?`<section class="card"><h2>Coming next</h2>${nx.map(s=>`<div class="ex lock"><span class="ec"><b>${esc(s.n)}</b></span><span class="es">${s.d}/100</span></div>`).join('')}</section>`:''}`}
+
+function path(){return `<section class="hero"><h1>The Path</h1><p class="mut">One road, ${N} skills, easiest to hardest. Tap a skill to see details.</p></section><div class="map">`+SKILLS.map((s,i)=>{const cl=i<st.idx?'done':i===st.idx?'cur':'lock';return `<button class="node ${cl}" data-a="node" data-i="${i}"><span class="dot">${i<st.idx?'&#10003;':i+1}</span><span class="nm"><b>${esc(s.n)}</b><em>${s.c} &middot; ${s.d}/100</em></span></button>`}).join('')+`</div>`}
+
+function flex(){const wd=new Date().getDay(),f=FLEX[wd],mins=ui.flexMin;const cnt=Math.min(f.items.length,Math.max(3,Math.round(mins/1.6)));
+ return `<section class="hero"><h1>Flexibility & Mobility</h1><p class="mut">Today's focus: <b>${f.focus}</b>. Gentle holds, never pain. Breathe slowly.</p></section>
+ <section class="card"><div class="bh"><h2>Today's session</h2></div><div class="chips">${[5,10,20,30].map(m=>`<button class="chip ${mins===m?'on':''}" data-a="fmin" data-v="${m}">${m} min</button>`).join('')}</div>
+ ${f.items.slice(0,cnt).map(x=>{const[n,r]=x.split('|');const k='flex:'+n;const on=log().done.includes(k);return `<label class="ex ${on?'done':''}"><input type="checkbox" data-a="chk" data-k="${esc(k)}" ${on?'checked':''}><span class="ec"><b>${esc(n)}</b></span><span class="es">${r}</span></label>`}).join('')}</section>
+ <section class="card"><h2>Weekly rotation</h2>${[1,2,3,4,5,6,0].map(d=>`<div class="wk"><b>${['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d]}</b><span>${FLEX[d].focus}</span></div>`).join('')}<p class="mut sm">Every workout also includes a mobility warm-up and a flexibility cool-down for that day's focus.</p></section>
+ <section class="card"><h2>Flexibility goals</h2>${FLEXGOALS.map((g,i)=>`<label class="ex ${st.flex.includes(i)?'done':''}"><input type="checkbox" data-a="fg" data-i="${i}" ${st.flex.includes(i)?'checked':''}><span class="ec"><b>${g}</b></span></label>`).join('')}</section>`}
+
+function settingsPanel(){const p=st.prof,im=p.units==='imperial';
+ const H=im?Math.round(p.h/2.54):Math.round(p.h),W=im?Math.round(p.w*2.2046):Math.round(p.w);
+ return `<div class="scrim" data-a="closeset"></div><aside class="panel"><div class="bh"><h2>Settings</h2><button class="x" data-a="closeset">&times;</button></div>
+ <h3>Equipment</h3><div class="two"><button class="opt ${st.equip==='floor'?'on':''}" data-a="equip" data-v="floor"><b>Floor only</b><em>No equipment. Bodyweight, floor and household items.</em></button><button class="opt ${st.equip==='gym'?'on':''}" data-a="equip" data-v="gym"><b>Full gym</b><em>Bars, rings, dumbbells, barbells, cables, machines.</em></button></div>
+ <h3>Your body</h3>${profForm(p,H,W,im,'s')}<button class="btn" data-a="saveprof">Save profile</button>
+ <h3>Current skill</h3><select id="curs">${SKILLS.map((s,i)=>`<option value="${i}" ${i===st.idx?'selected':''}>${i+1}. ${esc(s.n)}</option>`).join('')}</select><button class="btn ghost" data-a="setskill">Jump to this skill</button>
+ <h3>Account</h3><p class="mut">Signed in as <b>${esc(USER)}</b></p><button class="btn ghost" data-a="logout">Log out</button>
+ <h3>Backup / move to another device</h3><p class="mut sm">Copy this code, then paste it into Settings on another device and tap Import.</p><textarea id="bk" rows="3" onfocus="this.select()">${btoa(unescape(encodeURIComponent(JSON.stringify(st))))}</textarea><button class="btn ghost" data-a="import">Import pasted code</button>
+ <h3>Data</h3><button class="btn ghost danger" data-a="reset">Reset all progress</button></aside>`}
+function profForm(p,H,W,im,pre){return `<div class="form"><label>Age<input id="${pre}age" type="number" value="${p.age}"></label><label>Units<select id="${pre}units"><option value="metric" ${!im?'selected':''}>Metric (cm, kg)</option><option value="imperial" ${im?'selected':''}>Imperial (in, lb)</option></select></label>
+ <label>Height (${im?'in':'cm'})<input id="${pre}h" type="number" value="${H}"></label><label>Weight (${im?'lb':'kg'})<input id="${pre}w" type="number" value="${W}"></label>
+ <label>Training experience<select id="${pre}exp">${[['beginner','Beginner (under 1 year)'],['intermediate','Intermediate (1-3 years)'],['advanced','Advanced (3+ years)']].map(([k,n])=>`<option value="${k}" ${p.exp===k?'selected':''}>${n}</option>`).join('')}</select></label></div>`}
+function readProf(pre){const im=$('#'+pre+'units').value==='imperial';let h=+$('#'+pre+'h').value,w=+$('#'+pre+'w').value;if(im){h*=2.54;w/=2.2046}
+ return{age:Math.max(10,Math.min(90,+$('#'+pre+'age').value||25)),h:Math.max(120,Math.min(230,h||175)),w:Math.max(30,Math.min(250,w||72)),units:im?'imperial':'metric',exp:$('#'+pre+'exp').value}}
+
+function onboard(){return `<div class="scrim on"></div><aside class="panel center"><h1>Welcome to CalisQuest</h1><p class="mut">One path. Every calisthenics skill, from push-ups to planche and iron cross, while building a strong, aesthetic, mobile body. Tell me about you so I can tune your reps.</p>
+ ${profForm(st.prof,st.prof.h,st.prof.w,false,'o')}
+ <div class="form"><label>Max clean push-ups<input id="opu" type="number" value="0"></label><label>Max strict pull-ups (0 if none)<input id="opl" type="number" value="0"></label></div>
+ <h3>Equipment</h3><div class="two"><button class="opt ${st.equip==='floor'?'on':''}" data-a="oequip" data-v="floor"><b>Floor only</b><em>No equipment</em></button><button class="opt ${st.equip==='gym'?'on':''}" data-a="oequip" data-v="gym"><b>Full gym</b><em>Everything in a gym</em></button></div>
+ <p class="mut sm">You can switch equipment anytime from the top bar or settings.</p><button class="btn big" data-a="start">Start my journey</button></aside>`}
+
+function modal(){const s=SKILLS[ui.modal];if(!s)return'';return `<div class="scrim on" data-a="closemodal"></div><aside class="panel center"><div class="bh"><h2>${esc(s.n)}</h2><button class="x" data-a="closemodal">&times;</button></div><p class="mut">${s.c.toUpperCase()} &middot; Difficulty ${s.d}/100</p><p>${esc(s.why)}</p><h3>How you know you have it</h3><ul>${s.t.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>${ui.modal!==st.idx?`<button class="btn ghost" data-a="jump" data-i="${ui.modal}">Set as current skill</button>`:''}</aside>`}
+
+function render(){if(!USER){$('#app').innerHTML=authView();return}const v={today,quest,path,flex,fuel}[st.view]||today;
+ $('#app').innerHTML=header()+`<main>${v()}</main>`+nav()+(ui.settings?settingsPanel():'')+(ui.onboard?onboard():'')+(ui.modal!==null&&!ui.onboard?modal():'');save()}
+
+// ---------- events ----------
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,v=b.dataset.v,i=+b.dataset.i;
+ if(a==='chk')return;
+ if(a==='amode'){ui.mode=v;ui.err=''}
+ else if(a==='auth'){doAuth();return}
+ else if(a==='logout'){USER=null;lss('cq.session','');ui.settings=false}
+ else if(a==='import'){try{const o=JSON.parse(decodeURIComponent(escape(atob($('#bk').value.trim()))));if(!o.prof)throw 0;st=Object.assign({},st,o);alert('Backup imported.')}catch(x){alert('That backup code is not valid.');return}}
+ else
+ if(a==='equip'){st.equip=v}
+ else if(a==='oequip'){st.equip=v}
+ else if(a==='settings')ui.settings=true;
+ else if(a==='closeset')ui.settings=false;
+ else if(a==='view'){st.view=v;scrollTo(0,0)}
+ else if(a==='time'){const c=st.checkin[dk()]=st.checkin[dk()]||{};c.time=+v;ui.custom=false}
+ else if(a==='customtime')ui.custom=true;
+ else if(a==='setcustom'){const x=+$('#ct').value;if(x>=10&&x<=180){const c=st.checkin[dk()]=st.checkin[dk()]||{};c.time=x;ui.custom=false}}
+ else if(a==='energy'){const c=st.checkin[dk()]=st.checkin[dk()]||{};c.energy=v}
+ else if(a==='finish'){const L=log();L.fin=true;L.xp=60+L.done.length*10;st.xp+=L.xp}
+ else if(a==='advance'){if(tests().every(Boolean)){st.xp+=500;st.idx=Math.min(N,st.idx+1);ui.win=true;scrollTo(0,0)}}
+ else if(a==='node')ui.modal=i;
+ else if(a==='closemodal')ui.modal=null;
+ else if(a==='jump'){if(confirm('Set "'+SKILLS[i].n+'" as your current skill?')){st.idx=i;ui.modal=null}}
+ else if(a==='fmin')ui.flexMin=+v;
+ else if(a==='saveprof')st.prof=readProf('s');
+ else if(a==='setskill'){st.idx=+$('#curs').value;ui.settings=false}
+ else if(a==='reset'){if(confirm('Erase all progress and settings?')){st=JSON.parse(JSON.stringify(def));ui.onboard=true;ui.settings=false}}
+ else if(a==='start'){st.prof=readProf('o');const p=+$('#opu').value||0,u=+$('#opl').value||0;
+  st.idx=p>=40&&u>=12?6:p>=25&&u>=10?5:p>=25&&u>=3?3:p>=20?1:0;st.setup=true;ui.onboard=false}
+ render()});
+document.addEventListener('change',e=>{const t=e.target,a=t.dataset.a;if(!a)return;
+ if(a==='chk'){const L=log(),k=t.dataset.k,j=L.done.indexOf(k);if(t.checked&&j<0)L.done.push(k);if(!t.checked&&j>=0)L.done.splice(j,1)}
+ else if(a==='test'){tests()[+t.dataset.i]=t.checked}
+ else if(a==='fg'){const i=+t.dataset.i,j=st.flex.indexOf(i);if(j<0)st.flex.push(i);else st.flex.splice(j,1)}
+ render()});
+async function doAuth(){const u=$('#au').value.trim().toLowerCase(),p=$('#ap').value;const U=users();
+ if(u.length<3){ui.err='Username must be at least 3 characters.';return render()}
+ if(p.length<6){ui.err='Password must be at least 6 characters.';return render()}
+ if(!canStore()){ui.err='This page cannot save accounts (storage is blocked).';return render()}
+ const h=await hash(u+':'+p);
+ if(ui.mode==='signup'){if(U[u]){ui.err='That username is taken on this device. Try logging in.';return render()}U[u]=h;lss('cq.users',JSON.stringify(U))}
+ else if(U[u]!==h){ui.err='Wrong username or password.';return render()}
+ ui.err='';loadUser(u);render()}
+const s0=lsg('cq.session');if(s0&&users()[s0])loadUser(s0);
+render();
+</script></body></html>
