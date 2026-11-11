@@ -250,14 +250,14 @@ const lss=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
 const canStore=()=>{try{localStorage.setItem('cq.t','1');return localStorage.getItem('cq.t')==='1'}catch(e){return false}};
 let USER=null,KEY='',st=Object.assign({},def);
 function loadUser(u){USER=u;KEY='calisquest.v1.'+u;let m=null;try{m=JSON.parse(lsg(KEY)||'null')}catch(e){}st=Object.assign({},JSON.parse(JSON.stringify(def)),m||{});ui.onboard=!st.setup;lss('cq.session',u)}
-const save=()=>{if(USER)lss(KEY,JSON.stringify(st))};
+const save=()=>{if(USER){lss(KEY,JSON.stringify(st));if(typeof SESS!=='undefined'&&SESS)push()}};
 const dk=(d=new Date())=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const N=SKILLS.length;
 let ui={settings:false,onboard:false,modal:null,flexMin:10,custom:false,mode:'signup',err:''};
 const users=()=>{try{return JSON.parse(lsg('cq.users')||'{}')}catch(e){return{}}};
 async function hash(s){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){let h=5381;for(const c of s)h=(h*33^c.charCodeAt(0))>>>0;return'f'+h}}
-function authView(){const su=ui.mode==='signup';return `<div class="auth"><div class="brand big"><b>CALIS</b>QUEST</div><p class="mut">Learn every calisthenics skill. Get insanely strong. Look the part.</p><div class="seg"><button data-a="amode" data-v="signup" class="${su?'on':''}">Create account</button><button data-a="amode" data-v="login" class="${su?'':'on'}">Log in</button></div><div class="form one"><label>Username<input id="au" autocomplete="username" autocapitalize="none"></label><label>Password<input id="ap" type="password" autocomplete="${su?'new-password':'current-password'}"></label></div>${ui.err?`<p class="err">${ui.err}</p>`:''}<button class="btn big" data-a="auth">${su?'Create account':'Log in'}</button>${canStore()?'':'<p class="err">This page blocks saving data, so accounts and progress cannot be kept here. Open the app from a regular website address (not inside a preview frame).</p>'}<p class="mut sm">Accounts are stored on this device. Use Settings > Backup to move your progress to another device.</p></div>`}
+function authView(){const su=ui.mode==='signup';return `<div class="auth"><div class="brand big"><b>CALIS</b>QUEST</div><p class="mut">Learn every calisthenics skill. Get insanely strong. Look the part.</p><div class="seg"><button data-a="amode" data-v="signup" class="${su?'on':''}">Create account</button><button data-a="amode" data-v="login" class="${su?'':'on'}">Log in</button></div><div class="form one"><label>Email<input id="au" type="email" autocomplete="email" autocapitalize="none"></label><label>Password<input id="ap" type="password" autocomplete="${su?'new-password':'current-password'}"></label></div>${ui.err?`<p class="err">${ui.err}</p>`:''}<button class="btn big" data-a="auth">${su?'Create account':'Log in'}</button>${canStore()?'':'<p class="err">This page blocks saving data, so accounts and progress cannot be kept here. Open the app from a regular website address (not inside a preview frame).</p>'}<p class="mut sm">Your account and progress sync across all your devices. Log in with the same email anywhere.</p></div>`}
 
 // ---------- fitness model ----------
 const bmi=()=>st.prof.w/Math.pow(st.prof.h/100,2);
@@ -401,7 +401,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b
  if(a==='chk')return;
  if(a==='amode'){ui.mode=v;ui.err=''}
  else if(a==='auth'){doAuth();return}
- else if(a==='logout'){USER=null;lss('cq.session','');ui.settings=false}
+ else if(a==='logout'){USER=null;SESS=null;lss('cq.sess','');lss('cq.session','');ui.settings=false}
  else if(a==='import'){try{const o=JSON.parse(decodeURIComponent(escape(atob($('#bk').value.trim()))));if(!o.prof)throw 0;st=Object.assign({},st,o);alert('Backup imported.')}catch(x){alert('That backup code is not valid.');return}}
  else
  if(a==='equip'){st.equip=v}
@@ -430,14 +430,19 @@ document.addEventListener('change',e=>{const t=e.target,a=t.dataset.a;if(!a)retu
  else if(a==='test'){tests()[+t.dataset.i]=t.checked}
  else if(a==='fg'){const i=+t.dataset.i,j=st.flex.indexOf(i);if(j<0)st.flex.push(i);else st.flex.splice(j,1)}
  render()});
-async function doAuth(){const u=$('#au').value.trim().toLowerCase(),p=$('#ap').value;const U=users();
- if(u.length<3){ui.err='Username must be at least 3 characters.';return render()}
+const SB='https://nlvpexnjbslmupffoocz.supabase.co',AK='sb_publishable_IYToXHbPsq47pCxc3QFSTA_xURK2Mok';
+let SESS=null;try{SESS=JSON.parse(lsg('cq.sess')||'null')}catch(e){}
+async function sb(path,o={}){const r=await fetch(SB+path,{method:o.m||'GET',headers:Object.assign({apikey:AK,'Content-Type':'application/json'},o.h||{}),body:o.b?JSON.stringify(o.b):undefined});let j=null;try{j=await r.json()}catch(e){}return{ok:r.ok,j}}
+function setSess(j){SESS={at:j.access_token,rt:j.refresh_token,uid:j.user.id,email:j.user.email,exp:Date.now()+((j.expires_in||3600)-60)*1000};lss('cq.sess',JSON.stringify(SESS))}
+async function tok(){if(!SESS)return null;if(Date.now()>SESS.exp){const r=await sb('/auth/v1/token?grant_type=refresh_token',{m:'POST',b:{refresh_token:SESS.rt}});if(!r.ok||!r.j.access_token)return null;setSess(r.j)}return SESS.at}
+async function pull(){try{const t=await tok();if(!t)return;const r=await sb('/rest/v1/progress?select=data&user_id=eq.'+SESS.uid,{h:{Authorization:'Bearer '+t}});if(!r.ok)return;
+ if(r.j&&r.j[0]&&r.j[0].data&&r.j[0].data.setup&&(r.j[0].data._ts||0)>(st._ts||0)){st=Object.assign({},JSON.parse(JSON.stringify(def)),r.j[0].data);ui.onboard=!st.setup;lss(KEY,JSON.stringify(st));render()}else if(st.setup)push()}catch(e){}}
+let pt=null;function push(){clearTimeout(pt);pt=setTimeout(async()=>{try{const t=await tok();if(!t||!st.setup)return;st._ts=Date.now();lss(KEY,JSON.stringify(st));await sb('/rest/v1/progress?on_conflict=user_id',{m:'POST',h:{Authorization:'Bearer '+t,Prefer:'resolution=merge-duplicates,return=minimal'},b:{user_id:SESS.uid,data:st,updated_at:new Date().toISOString()}})}catch(e){}},1500)}
+async function doAuth(){const u=$('#au').value.trim().toLowerCase(),p=$('#ap').value;
+ if(!/^\S+@\S+\.\S+$/.test(u)){ui.err='Enter a valid email address.';return render()}
  if(p.length<6){ui.err='Password must be at least 6 characters.';return render()}
- if(!canStore()){ui.err='This page cannot save accounts (storage is blocked).';return render()}
- const h=await hash(u+':'+p);
- if(ui.mode==='signup'){if(U[u]){ui.err='That username is taken on this device. Try logging in.';return render()}U[u]=h;lss('cq.users',JSON.stringify(U))}
- else if(U[u]!==h){ui.err='Wrong username or password.';return render()}
- ui.err='';loadUser(u);render()}
-const s0=lsg('cq.session');if(s0&&users()[s0])loadUser(s0);
-render();
+ ui.err='';let r;try{r=await sb(ui.mode==='signup'?'/auth/v1/signup':'/auth/v1/token?grant_type=password',{m:'POST',b:{email:u,password:p}})}catch(e){ui.err='Cannot reach the server. Check your connection.';return render()}
+ if(!r.ok||!r.j.access_token){const m=(r.j&&(r.j.msg||r.j.error_description||r.j.message))||'Something went wrong.';ui.err=ui.mode==='signup'&&r.ok?'Check your email to confirm your account, then log in.':(/invalid login/i.test(m)?'Wrong email or password.':m);return render()}
+ setSess(r.j);loadUser(u);render();pull()}
+if(SESS&&SESS.email){loadUser(SESS.email);render();pull()}else render();
 </script></body></html>
